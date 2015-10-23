@@ -36,11 +36,19 @@
   when: eclipse_download.changed
   tags: eclipse_setup
 
-- name: eclipse | Install tar
+- name: eclipse | Install tar Debian
   apt:
     pkg=tar
     state="present"
   tags: eclipse_setup
+  when: ansible_os_family == 'Debian'
+
+  - name: eclipse | Install tar RedHat
+    yum:
+      name=tar
+      state="present"
+    tags: eclipse_setup
+    when: ansible_os_family == 'RedHat'
 
 - name: eclipse | Extract archive eclipse
   command: tar xzf {{ eclipse_dir_tmp }}/{{eclipse_archive}} -C {{eclipse_base_dir}}/eclipse-{{eclipse_name}} --strip-components=1
@@ -199,14 +207,19 @@
   ignore_errors: True
 
 #Pydev
-- name: eclipse | Install python pexpect for adding Pydev certificat
+- name: eclipse | Install python pexpect for adding Pydev certificate Debian
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian'
+  when: ansible_os_family == 'Debian'
   with_items:
     - python-pexpect
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
 
-#todo for RehHat : sudo yum install pexpect.noarch
+- name: eclipse | Install python pexpect for adding Pydev certificate Redhat
+  yum: name={{ item }} state=present
+  when: ansible_os_family == 'RedHat'
+  with_items:
+    - pexpect.noarch
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
 
 - name: eclipse | Transfer eclipse Pydev certificate
   copy: src=add_pydev_certificate.py dest={{ eclipse_dir_tmp }} mode=0777 force=yes owner="{{eclipse_owner}}" group="{{eclipse_group}}"
@@ -226,10 +239,18 @@
   ignore_errors: True
 
 #Subclipse
-- name: eclipse | Install JavaHL for subclipse
+- name: eclipse | Install JavaHL for subclipse Debian
   apt: pkg={{ item }} state=present
   sudo: yes
-  when: ansible_distribution == 'Debian'
+  when: ansible_os_family == 'Debian'
+  with_items:
+    - libsvn-java
+  when: eclipse_plugins_subclipse_enabled and eclipse_plugins_enabled
+
+- name: eclipse | Install JavaHL for subclipse RedHat
+  yum: name={{ item }} state=present
+  sudo: yes
+  when: ansible_os_family == 'RedHat'
   with_items:
     - libsvn-java
   when: eclipse_plugins_subclipse_enabled and eclipse_plugins_enabled
