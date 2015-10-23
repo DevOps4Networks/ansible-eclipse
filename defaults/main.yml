@@ -1,10 +1,10 @@
 eclipse_enabled: yes                       # Enable module
 
-#user: 'albandri' #please override me
-user: "{{ lookup('env','USER') }}"
+user: 'root' #please override me
+#user: "{{ lookup('env','USER') }}"
 eclipse_owner: "{{ user }}"
 eclipse_group: "{{ eclipse_owner }}"
-#home: '~' #please override me
+home: '~odldev' #please override me
 home: "{{ lookup('env','HOME') }}"
 eclipse_owner_home: "{{ home }}"
 eclipse_base_dir: "/usr/local/eclipse"
@@ -14,8 +14,7 @@ cur_dir: "{{lookup('pipe','pwd')}}"
 ## Most likely you dont need to edit 
 #todo eclipse_service_enabled   : 'yes'
 eclipse_major: "4"
-eclipse_minor: "4"
-#kepler 3.7.2.1
+eclipse_minor: "5"
 eclipse_version: "{{eclipse_major}}.{{eclipse_minor}}"
 eclipse_name: "mars"
 eclipse_release_version: 1
