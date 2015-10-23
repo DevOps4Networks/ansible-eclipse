@@ -43,12 +43,12 @@
   tags: eclipse_setup
   when: ansible_os_family == 'Debian'
 
-  - name: eclipse | Install tar RedHat
-    yum:
-      name=tar
-      state="present"
-    tags: eclipse_setup
-    when: ansible_os_family == 'RedHat'
+- name: eclipse | Install tar RedHat
+  yum:
+    name=tar
+    state="present"
+  tags: eclipse_setup
+  when: ansible_os_family == 'RedHat'
 
 - name: eclipse | Extract archive eclipse
   command: tar xzf {{ eclipse_dir_tmp }}/{{eclipse_archive}} -C {{eclipse_base_dir}}/eclipse-{{eclipse_name}} --strip-components=1
