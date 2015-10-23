@@ -18,8 +18,8 @@ eclipse_minor: "4"
 #kepler 3.7.2.1
 eclipse_version: "{{eclipse_major}}.{{eclipse_minor}}"
 eclipse_name: "mars"
-eclipse_release_version=1
-eclipse_modelling_release_version=R
+eclipse_release_version: 1
+eclipse_modelling_release_version: R
 eclipse_archive_extracted: "eclipse"
 #modeling
 #eclipse_archive: "eclipse-modeling-{{eclipse_name}}-{{eclipse_modelling_release_version}}-linux-gtk-x86_64.tar.gz"
