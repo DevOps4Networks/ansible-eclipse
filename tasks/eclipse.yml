@@ -212,14 +212,14 @@
   when: ansible_os_family == 'Debian'
   with_items:
     - python-pexpect
-when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'Debian'
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'Debian'
 
 - name: eclipse | Install python pexpect for adding Pydev certificate Redhat
   yum: name={{ item }} state=present
   when: ansible_os_family == 'RedHat'
   with_items:
     - pexpect.noarch
-when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'RedHat'
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'RedHat'
 
 - name: eclipse | Transfer eclipse Pydev certificate
   copy: src=add_pydev_certificate.py dest={{ eclipse_dir_tmp }} mode=0777 force=yes owner="{{eclipse_install_owner}}" group="{{eclipse_install_group}}"
