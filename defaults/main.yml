@@ -1,16 +1,17 @@
 eclipse_enabled: yes                       # Enable module
 
-user: 'root' #please override me
-#user: "{{ lookup('env','USER') }}"
-eclipse_owner: "{{ user }}"
-eclipse_group: "{{ eclipse_owner }}"
-home: '~odldev' #please override me
-home: "{{ lookup('env','HOME') }}"
-eclipse_owner_home: "{{ home }}"
+eclipse_install_owner: root
+eclipse_install_group: "{{ eclipse_install_owner }}"
+eclipse_dev_user: odldev
+eclipse_dev_home: '~{{ eclipse_dev_user }}' #please override me
+eclipse_install_owner_home: "~{{ eclipse_install_owner }}"
 eclipse_base_dir: "/usr/local/eclipse"
 eclipse_link_base_dir: "/opt"
 eclipse_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
 cur_dir: "{{lookup('pipe','pwd')}}"
+# See http://download.eclipse.org/technology/m2e/releases/
+eclipse_m2e_major_version: 1.6
+eclipse_m2e_date_version: 1.6.2.20150902-0002
 ## Most likely you dont need to edit 
 #todo eclipse_service_enabled   : 'yes'
 eclipse_major: "4"
@@ -41,18 +42,14 @@ eclipse_plugins_cdt_enabled: no                       # Enable plugins
 eclipse_plugins_cmakeed_enabled: no                   # Enable plugins
 eclipse_plugins_openinterminal_enabled: no            # Enable plugins
 eclipse_plugins_protobuf_enabled: no                  # Enable plugins
-eclipse_plugins_yedit_enabled: no                     # Enable plugins
-eclipse_plugins_shelled_enabled: no                   # Enable plugins
-eclipse_plugins_webpageed_enabled: no                 # Enable plugins
-eclipse_plugins_pydev_enabled: no                     # Enable plugins
-eclipse_plugins_m2e_enabled: no                       # Enable plugins
+eclipse_plugins_yedit_enabled: yes                     # Enable plugins
+eclipse_plugins_shelled_enabled: yes                   # Enable plugins
+eclipse_plugins_webpageed_enabled: yes                 # Enable plugins
+eclipse_plugins_pydev_enabled: yes                     # Enable plugins
+eclipse_plugins_m2e_enabled: yes                       # Enable plugins
 eclipse_plugins_subclipse_enabled: no                 # Enable plugins
 
 eclipse_ini_enabled: yes                              # Enable overriding eclipse.ini
-#default is 256m
-eclipse_launcher_XXMaxPermSize: "256m"
-#default is 256m
-eclipse_XXMaxPermSize: "1024m"
 #default is -Xms40m
 eclipse_Xms: "512m"
 #default is -Xmx512m

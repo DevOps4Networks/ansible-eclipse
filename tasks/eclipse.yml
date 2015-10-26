@@ -2,10 +2,10 @@
 # This playbook contains common plays to install eclipse.
 
 - name: eclipse | Check user exists
-  user: name={{eclipse_owner}} state=present
+  user: name={{eclipse_install_owner}} state=present
 
 - name: eclipse | Check user home directory
-  stat: path={{eclipse_owner_home}}
+  stat: path={{eclipse_install_owner_home}}
   register: home_present
 
 - debug: msg=" eclipse | Path exists and is a directory"
@@ -22,7 +22,7 @@
   get_url: url={{eclipse_url}}  dest={{cur_dir}}/{{eclipse_archive}} force=no
 
 - name: eclipse | Copy eclipse into place
-  copy: src={{cur_dir}}/{{eclipse_archive}}  dest="{{ eclipse_dir_tmp }}/{{eclipse_archive}}" owner="{{eclipse_owner}}" group="{{eclipse_group}}" mode=644
+  copy: src={{cur_dir}}/{{eclipse_archive}}  dest="{{ eclipse_dir_tmp }}/{{eclipse_archive}}" owner="{{eclipse_install_owner}}" group="{{eclipse_install_group}}" mode=644
   register: eclipse_download
   tags: eclipse_setup
 
@@ -30,8 +30,8 @@
   file:
     dest="{{eclipse_base_dir}}/eclipse-{{eclipse_name}}"
     state=directory
-    owner="{{eclipse_owner}}"
-    group="{{eclipse_group}}"
+    owner="{{eclipse_install_owner}}"
+    group="{{eclipse_install_group}}"
   sudo : yes
   when: eclipse_download.changed
   tags: eclipse_setup
@@ -55,7 +55,7 @@
   when: eclipse_download.changed
 
 - name: eclipse | Change archive eclipse ownership
-  file: path={{eclipse_base_dir}}/eclipse-{{eclipse_name}} owner={{eclipse_owner}} state=directory recurse=yes
+  file: path={{eclipse_base_dir}}/eclipse-{{eclipse_name}} owner={{eclipse_install_owner}} state=directory recurse=yes
   when: eclipse_download.changed
 
 - name: eclipse | Stat {{eclipse_base_dir}}/eclipse-{{eclipse_name}}
@@ -66,15 +66,15 @@
   when: eclipse_archive_extracted_present.stat.isdir is defined and eclipse_archive_extracted_present.stat.isdir == true
 
 - fail: msg=" eclipse | Whoops! file ownership has changed"
-  when: eclipse_archive_extracted_present.stat.pw_name != '{{eclipse_owner}}'
+  when: eclipse_archive_extracted_present.stat.pw_name != '{{eclipse_install_owner}}'
 
 - name: eclipse | Create a link to eclipse (1)
   file:
     src="{{eclipse_base_dir}}/eclipse-{{eclipse_name}}"
     dest="{{eclipse_base_dir}}/eclipse-{{eclipse_major}}"
     state=link
-    owner="{{eclipse_owner}}"
-#    group="{{eclipse_group}}"
+    owner="{{eclipse_install_owner}}"
+#    group="{{eclipse_install_group}}"
   tags: eclipse_setup
 
 - name: eclipse | Create a link to eclipse (2)
@@ -82,8 +82,8 @@
     src="{{eclipse_base_dir}}/eclipse-{{eclipse_name}}"
     dest="{{eclipse_link_base_dir}}/eclipse-{{eclipse_major}}"
     state=link
-    owner="{{eclipse_owner}}"
-#    group="{{eclipse_group}}"
+    owner="{{eclipse_install_owner}}"
+#    group="{{eclipse_install_group}}"
   sudo: yes
   tags: eclipse_setup
 
@@ -222,7 +222,7 @@
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
 
 - name: eclipse | Transfer eclipse Pydev certificate
-  copy: src=add_pydev_certificate.py dest={{ eclipse_dir_tmp }} mode=0777 force=yes owner="{{eclipse_owner}}" group="{{eclipse_group}}"
+  copy: src=add_pydev_certificate.py dest={{ eclipse_dir_tmp }} mode=0777 force=yes owner="{{eclipse_install_owner}}" group="{{eclipse_install_group}}"
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
 
 - name: eclipse | Add eclipse Pydev certificate
@@ -273,18 +273,10 @@
   command: "{{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse -nosplash \
   -application org.eclipse.equinox.p2.director \
   -destination {{eclipse_base_dir}}/eclipse-{{eclipse_major}} \
-  -repository http://download.eclipse.org/releases/{{eclipse_name}}/,http://download.eclipse.org/technology/m2e/releases/1.5/1.5.0.20140606-0033 \
+-repository http://download.eclipse.org/releases/{{eclipse_name}}/,http://download.eclipse.org/technology/m2e/releases/{{ eclipse_m2e_major_version }}/{{ eclipse_m2e_date_version }} \
   -installIU org.eclipse.m2e.feature.feature.group,org.eclipse.m2e.logback.feature.feature.group"
   when: eclipse_plugins_m2e_enabled and eclipse_plugins_enabled
   ignore_errors: True
-
-- name:  eclipse | Configure eclipse ini configuration (Launcher XXMaxPermSize)
-  lineinfile: regexp="^256m" line="{{ eclipse_launcher_XXMaxPermSize }}" dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse.ini
-  when: eclipse_ini_enabled
-
-- name:  eclipse | Configure eclipse ini configuration (XXMaxPermSize)
-  lineinfile: regexp="^-XX:MaxPermSize=256m" line="-XX:MaxPermSize={{ eclipse_XXMaxPermSize }}" dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse.ini
-  when: eclipse_ini_enabled
 
 - name:  eclipse | Configure eclipse ini configuration (Xms)
   lineinfile: regexp="^-Xms40m" line="-Xms{{ eclipse_XXMaxPermSize }}" dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse.ini
@@ -295,19 +287,19 @@
   when: eclipse_ini_enabled
 
 - name: eclipse | Configure eclipse icon Debian
-  template: src=eclipse.desktop.j2 dest={{ eclipse_owner_home }}/.local/share/applications/eclipse.desktop
+  template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   ignore_errors: yes
   tags: eclipse_setup
 
 - name: eclipse | Configure eclipse icon RedHat
-  template: src=eclipse.desktop.j2 dest={{ eclipse_owner_home }}/.local/share/applications/eclipse.desktop
+  template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
   ignore_errors: yes
   tags: eclipse_setup
 
 - name: eclipse | fix permissions eclipse home
-  file: recurse=yes owner={{ eclipse_owner }} dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/configuration
+  file: recurse=yes owner={{ eclipse_install_owner }} dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/configuration
   tags: eclipse_setup
 
 - name: eclipse | Cleanup temporary directory
