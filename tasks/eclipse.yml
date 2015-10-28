@@ -208,12 +208,12 @@
 
 #Pydev
 - name: eclipse | Get eclipse Pydev plugin bundle
-  get_url: url={{ pydev_url }}/{{ pydev_bundle }} dest=/tmp/pydev
+  get_url: url="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   ignore_errors: True
   
 - name: eclipse | Unzip PyDev bundle
-  unarchive: src=/tmp/pydev/{{ pydev_bundle }} dest=/tmp/pydev
+  unarchive: src="/tmp/pydev/{{ pydev_bundle }}" dest=/tmp/pydev
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Install PyDev plugins
