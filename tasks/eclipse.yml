@@ -186,7 +186,7 @@
   ignore_errors: True
 
 #shelled - Bash Script Editor
-- name: eclipse | Install eclipse Bash Script Editor plugins
+- name: eclipse | Inst	all eclipse Bash Script Editor plugins
   command: "{{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse -nosplash \
   -application org.eclipse.equinox.p2.director \
   -destination {{eclipse_base_dir}}/eclipse-{{eclipse_major}} \
@@ -207,37 +207,19 @@
   ignore_errors: True
 
 #Pydev
-- name: eclipse | Install python pexpect for adding Pydev certificate Debian
-  apt: pkg={{ item }} state=present
-  when: ansible_os_family == 'Debian'
-  with_items:
-    - python-pexpect
-  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'Debian'
-
-- name: eclipse | Install python pexpect for adding Pydev certificate Redhat
-  yum: name={{ item }} state=present
-  when: ansible_os_family == 'RedHat'
-  with_items:
-    - pexpect.noarch
-  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled and ansible_os_family == 'RedHat'
-
-- name: eclipse | Transfer eclipse Pydev certificate
-  copy: src=add_pydev_certificate.py dest={{ eclipse_dir_tmp }} mode=0777 force=yes owner="{{eclipse_install_owner}}" group="{{eclipse_install_group}}"
-  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
-
-- name: eclipse | Add eclipse Pydev certificate
-  command: python {{ eclipse_dir_tmp }}/add_pydev_certificate.py
-  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
-
-- name: eclipse | Install eclipse Pydev plugins
-  command: "{{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse -nosplash \
-  -application org.eclipse.equinox.p2.director \
-  -destination {{eclipse_base_dir}}/eclipse-{{eclipse_major}} \
-  -repository http://download.eclipse.org/technology/dltk/updates/,http://pydev.org/updates/ \
-  -installIU org.python.pydev.feature.feature.group"
+- name: eclipse | Get eclipse Pydev plugin bundle
+  get_url: url={{ pydev_url }}/{{ pydev_bundle }} dest=/tmp/pydev
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   ignore_errors: True
-
+  
+- name: eclipse | Unzip PyDev bundle
+  unarchive: src=/tmp/pydev
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
+  
+- name: eclipse | Install PyDev plugins
+  command: mv /tmp/pydev/features /tmp/pydev/plugins {{eclipse_base_dir}}/eclipse-{{eclipse_major}}/dropins 
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
+  
 #Subclipse
 - name: eclipse | Install JavaHL for subclipse Debian
   apt: pkg={{ item }} state=present

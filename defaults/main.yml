@@ -36,6 +36,11 @@ eclipse_archive: "eclipse-jee-{{eclipse_name}}-{{eclipse_release_version}}-linux
 eclipse_url: "https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/{{eclipse_name}}/{{eclipse_release_version}}/{{eclipse_archive}}&r=1"
 eclipse_home_dir: "{{eclipse_base_dir}}/{{eclipse_name}}-{{eclipse_version}}"
 
+#PyDev
+pydev_ver: 4.4.0
+pydev_url: "http://freefr.dl.sourceforge.net/project/pydev/pydev/PyDev {{ pydev_ver }}"
+pydev_bundle: "PyDev {{ pydev_ver }}.zip"
+
 eclipse_plugins_enabled: yes                          # Enable plugins
 eclipse_plugins_emf_enabled: no                       # Enable plugins
 eclipse_plugins_cdt_enabled: no                       # Enable plugins
