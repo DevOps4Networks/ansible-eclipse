@@ -3,7 +3,7 @@ eclipse_enabled: yes                       # Enable module
 eclipse_install_owner: root
 eclipse_install_group: "{{ eclipse_install_owner }}"
 eclipse_dev_user: odldev
-eclipse_dev_home: '~{{ eclipse_dev_user }}' #please override me
+eclipse_dev_user_home: '~{{ eclipse_dev_user }}' #please override me
 eclipse_install_owner_home: "~{{ eclipse_install_owner }}"
 eclipse_base_dir: "/usr/local/eclipse"
 eclipse_link_base_dir: "/opt"
