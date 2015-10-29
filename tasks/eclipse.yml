@@ -208,7 +208,9 @@
 
 #Pydev
 - name: eclipse | Get eclipse Pydev plugin bundle
-  command: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}"
+  command: mkdir -p /tmp/pydev 
+  command: cd /tmp/pydev
+  command: wget "{{ pydev_url }}/{{ pydev_bundle }}"
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   ignore_errors: True
   
