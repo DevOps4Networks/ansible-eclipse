@@ -264,12 +264,24 @@
   lineinfile: regexp="^-Xmx512m" line="-Xmx{{ eclipse_Xmx }}" dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse.ini
   when: eclipse_ini_enabled
 
+- name: eclipse | Create eclipse icon destination Debian
+  file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
+  when: ansible_os_family == 'Ubuntu'
+  ignore_errors: yes
+  tags: eclipse_setup
+
 - name: eclipse | Configure eclipse icon Debian
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   ignore_errors: yes
   tags: eclipse_setup
 
+- name: eclipse | Create eclipse icon destination RedHat
+  file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
+  when: ansible_os_family == 'RedHat'
+  ignore_errors: yes
+  tags: eclipse_setup
+  
 - name: eclipse | Configure eclipse icon RedHat
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
