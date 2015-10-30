@@ -14,7 +14,6 @@
 - name: eclipse | Create temporary directory
   shell: mktemp -d
   register: tempdir
-  tags: eclipse_setup
 
 - name: eclipse | Download eclipse on 'master' if we don't have it
   connection: local
@@ -24,7 +23,6 @@
 - name: eclipse | Copy eclipse into place
   copy: src={{cur_dir}}/{{eclipse_archive}}  dest="{{ eclipse_dir_tmp }}/{{eclipse_archive}}" owner="{{eclipse_install_owner}}" group="{{eclipse_install_group}}" mode=644
   register: eclipse_download
-  tags: eclipse_setup
 
 - name: eclipse | Create base directory
   file:
@@ -34,20 +32,17 @@
     group="{{eclipse_install_group}}"
   sudo : yes
   when: eclipse_download.changed
-  tags: eclipse_setup
 
 - name: eclipse | Install tar Debian
   apt:
     pkg=tar
     state="present"
-  tags: eclipse_setup
   when: ansible_os_family == 'Debian'
 
 - name: eclipse | Install tar RedHat
   yum:
     name=tar
     state="present"
-  tags: eclipse_setup
   when: ansible_os_family == 'RedHat'
 
 - name: eclipse | Extract archive eclipse
@@ -75,7 +70,6 @@
     state=link
     owner="{{eclipse_install_owner}}"
 #    group="{{eclipse_install_group}}"
-  tags: eclipse_setup
 
 - name: eclipse | Create a link to eclipse (2)
   file:
@@ -85,7 +79,6 @@
     owner="{{eclipse_install_owner}}"
 #    group="{{eclipse_install_group}}"
   sudo: yes
-  tags: eclipse_setup
 
 - name: eclipse | Install eclipse MoDisco & EMF Facet plugins
   command: "{{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse -nosplash \
@@ -211,7 +204,6 @@
   #TODO Test get_url again and raise a bug about spaces in the URL
   shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}"
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
-  ignore_errors: True
   
 - name: eclipse | Unzip PyDev bundle
   unarchive: src="/tmp/pydev/{{ pydev_bundle }}" dest=/tmp/pydev
@@ -249,7 +241,6 @@
   -installIU org.tigris.subversion.clientadapter.javahl.feature.feature.group \
   -installIU org.tigris.subversion.subclipse.graph.feature.feature.group"
   when: eclipse_plugins_subclipse_enabled and eclipse_plugins_enabled
-  ignore_errors: True
 
 #Maven m2e
 - name: eclipse | Install eclipse Maven m2e plugins
@@ -259,7 +250,6 @@
 -repository http://download.eclipse.org/releases/{{eclipse_name}}/,http://download.eclipse.org/technology/m2e/releases/{{ eclipse_m2e_major_version }}/{{ eclipse_m2e_date_version }} \
   -installIU org.eclipse.m2e.feature.feature.group,org.eclipse.m2e.logback.feature.feature.group"
   when: eclipse_plugins_m2e_enabled and eclipse_plugins_enabled
-  ignore_errors: True
 
 #Eclipse.ini configuration
 - name:  eclipse | Configure eclipse ini configuration (Xmx)
@@ -270,29 +260,23 @@
 - name: eclipse | Create eclipse icon destination Debian
   file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
   when: ansible_os_family == 'Ubuntu'
-  tags: eclipse_setup
 
 - name: eclipse | Configure eclipse icon Debian
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: eclipse_setup
 
 - name: eclipse | Create eclipse icon destination RedHat
   file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
   when: ansible_os_family == 'RedHat'
-  tags: eclipse_setup
   
 - name: eclipse | Configure eclipse icon RedHat
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
-  tags: eclipse_setup
 
 - name: eclipse | fix permissions eclipse home
   file: recurse=yes owner={{ eclipse_install_owner }} dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/configuration
-  tags: eclipse_setup
 
 - name: eclipse | Cleanup temporary directory
   file: name={{ tempdir.stdout }} state=absent
-  tags: eclipse_setup
 
 #- debug: msg=" eclipse | Start eclipse {{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse"

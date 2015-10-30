@@ -47,11 +47,11 @@ eclipse_plugins_cdt_enabled: no                       # Enable plugins
 eclipse_plugins_cmakeed_enabled: no                   # Enable plugins
 eclipse_plugins_openinterminal_enabled: no            # Enable plugins
 eclipse_plugins_protobuf_enabled: no                  # Enable plugins
-eclipse_plugins_yedit_enabled: yes                     # Enable plugins
-eclipse_plugins_shelled_enabled: yes                   # Enable plugins
-eclipse_plugins_webpageed_enabled: yes                 # Enable plugins
-eclipse_plugins_pydev_enabled: yes                     # Enable plugins
-eclipse_plugins_m2e_enabled: yes                       # Enable plugins
+eclipse_plugins_yedit_enabled: yes                    # Enable plugins
+eclipse_plugins_shelled_enabled: yes                  # Enable plugins
+eclipse_plugins_webpageed_enabled: yes                # Enable plugins
+eclipse_plugins_pydev_enabled: yes                    # Enable plugins
+eclipse_plugins_m2e_enabled: yes                      # Enable plugins
 eclipse_plugins_subclipse_enabled: no                 # Enable plugins
 
 eclipse_ini_enabled: yes                              # Enable overriding eclipse.ini
