@@ -208,6 +208,7 @@
 
 #Pydev
 - name: eclipse | Get eclipse Pydev plugin bundle
+  #TODO Test get_url again and raise a bug about spaces in the URL
   shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}"
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   ignore_errors: True
@@ -267,25 +268,21 @@
 - name: eclipse | Create eclipse icon destination Debian
   file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
   when: ansible_os_family == 'Ubuntu'
-  ignore_errors: yes
   tags: eclipse_setup
 
 - name: eclipse | Configure eclipse icon Debian
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  ignore_errors: yes
   tags: eclipse_setup
 
 - name: eclipse | Create eclipse icon destination RedHat
   file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
   when: ansible_os_family == 'RedHat'
-  ignore_errors: yes
   tags: eclipse_setup
   
 - name: eclipse | Configure eclipse icon RedHat
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
-  ignore_errors: yes
   tags: eclipse_setup
 
 - name: eclipse | fix permissions eclipse home
