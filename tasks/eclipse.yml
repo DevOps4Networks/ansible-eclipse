@@ -258,7 +258,7 @@
 
 #Eclipse icon
 - name: eclipse | Create eclipse icon destination Debian
-  file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
+  file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
   when: ansible_os_family == 'Ubuntu'
 
 - name: eclipse | Configure eclipse icon Debian
@@ -266,7 +266,7 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: eclipse | Create eclipse icon destination RedHat
-  file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
+  file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
   when: ansible_os_family == 'RedHat'
   
 - name: eclipse | Configure eclipse icon RedHat
