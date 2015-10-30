@@ -59,9 +59,3 @@ eclipse_ini_enabled: yes                              # Enable overriding eclips
 eclipse_Xms: "512m"
 #default is -Xmx512m
 eclipse_Xmx: "2048m"
-
-docker_files_generated_directory: "./"
-docker_files_enable: no
-docker_volume_directory                  : "{{ eclipse_base_dir }}"
-docker_working_directory                 : "/home/vagrant"
-docker_image_name                        : "nabla/ansible-eclipse"
