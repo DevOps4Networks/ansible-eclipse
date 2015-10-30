@@ -261,10 +261,12 @@
   when: eclipse_plugins_m2e_enabled and eclipse_plugins_enabled
   ignore_errors: True
 
+#Eclipse.ini configuration
 - name:  eclipse | Configure eclipse ini configuration (Xmx)
   lineinfile: regexp="^-Xmx512m" line="-Xmx{{ eclipse_Xmx }}" dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse.ini
   when: eclipse_ini_enabled
 
+#Eclipse icon
 - name: eclipse | Create eclipse icon destination Debian
   file: path={{ eclipse_dev_user_home }}/.local/share/applications/ state=directory mode=0755
   when: ansible_os_family == 'Ubuntu'
@@ -293,4 +295,4 @@
   file: name={{ tempdir.stdout }} state=absent
   tags: eclipse_setup
 
-- debug: msg=" eclipse | Start eclipse {{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse"
+#- debug: msg=" eclipse | Start eclipse {{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse"
