@@ -267,7 +267,7 @@
 
 - name: eclipse | Create eclipse icon destination RedHat
   #file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
-  shell: mkdir {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }} {{ eclipse_dev_user_home }}/.local/share/applications; chmod -R 0644 {{ eclipse_dev_user_home }}/.local/share/applications
+  shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }} {{ eclipse_dev_user_home }}/.local/share/applications; chmod -R 0644 {{ eclipse_dev_user_home }}/.local/share/applications
   when: ansible_os_family == 'RedHat'
   
 - name: eclipse | Configure eclipse icon RedHat
