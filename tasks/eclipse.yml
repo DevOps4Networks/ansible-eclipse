@@ -266,12 +266,16 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: eclipse | Create eclipse icon destination RedHat
-  #file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
-  shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }} {{ eclipse_dev_user_home }}/.local; chmod -R 0644 {{ eclipse_dev_user_home }}/.local
+  file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} state=directory mode=0644
+  #shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }}:{{ eclipse_dev_group }} {{ eclipse_dev_user_home }}/.local; chmod -R 0644 {{ eclipse_dev_user_home }}/.local
   when: ansible_os_family == 'RedHat'
-  
+    
 - name: eclipse | Configure eclipse icon RedHat
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
+  when: ansible_os_family == 'RedHat'
+  
+- name: eclipse | fix permissions eclipse icon location home
+  file: recurse=yes owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
 
 - name: eclipse | fix permissions eclipse home
