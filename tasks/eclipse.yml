@@ -274,7 +274,7 @@
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   when: ansible_os_family == 'RedHat'
   
-#- name: eclipse | fix permissions eclipse icon location home
+- name: eclipse | fix permissions eclipse icon location home
   file: owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop mode=u+rwx,g+rwx,o+r
   when: ansible_os_family == 'RedHat'
 
