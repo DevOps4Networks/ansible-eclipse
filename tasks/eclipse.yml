@@ -247,7 +247,7 @@
   command: "{{eclipse_base_dir}}/eclipse-{{eclipse_major}}/eclipse -nosplash \
   -application org.eclipse.equinox.p2.director \
   -destination {{eclipse_base_dir}}/eclipse-{{eclipse_major}} \
--repository http://download.eclipse.org/releases/{{eclipse_name}}/,http://download.eclipse.org/technology/m2e/releases/{{ eclipse_m2e_major_version }}/{{ eclipse_m2e_date_version }} \
+  -repository http://download.eclipse.org/releases/{{eclipse_name}}/,http://download.eclipse.org/technology/m2e/releases/{{ eclipse_m2e_major_version }}/{{ eclipse_m2e_date_version }} \
   -installIU org.eclipse.m2e.feature.feature.group,org.eclipse.m2e.logback.feature.feature.group"
   when: eclipse_plugins_m2e_enabled and eclipse_plugins_enabled
 
@@ -267,7 +267,7 @@
 
 - name: eclipse | Create eclipse icon destination RedHat
   #file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
-  shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }} {{ eclipse_dev_user_home }}/.local/share/applications; chmod -R 0644 {{ eclipse_dev_user_home }}/.local/share/applications
+  shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }} {{ eclipse_dev_user_home }}/.local; chmod -R 0644 {{ eclipse_dev_user_home }}/.local
   when: ansible_os_family == 'RedHat'
   
 - name: eclipse | Configure eclipse icon RedHat
