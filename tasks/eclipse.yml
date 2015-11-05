@@ -257,27 +257,19 @@
   when: eclipse_ini_enabled
 
 #Eclipse icon
-- name: eclipse | Create eclipse icon destination Debian
-  file: path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} state=directory mode=0644
-  when: ansible_os_family == 'Ubuntu'
-
-- name: eclipse | Configure eclipse icon Debian
-  template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-
-- name: eclipse | Create eclipse icon destination RedHat
+- name: eclipse | Create eclipse icon destination
   file: recurse=yes path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} state=directory mode=u+rwx,g+rwx,o+r
-  #shell: mkdir -p {{ eclipse_dev_user_home }}/.local/share/applications; chown -R {{ eclipse_dev_user }}:{{ eclipse_dev_group }} {{ eclipse_dev_user_home }}/.local; chmod -R 0644 {{ eclipse_dev_user_home }}/.local
-  when: ansible_os_family == 'RedHat'
     
-- name: eclipse | Configure eclipse icon RedHat
+- name: eclipse | Configure eclipse menu entry
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
-  when: ansible_os_family == 'RedHat'
+  
+- name: eclipse | Configure eclipse desktop icon
+  template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/Desktop/eclipse.desktop
   
 - name: eclipse | fix permissions eclipse icon location home
   file: owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop mode=u+rwx,g+rwx,o+r
-  when: ansible_os_family == 'RedHat'
 
+#Tidy up Eclipse install
 - name: eclipse | fix permissions eclipse home
   file: recurse=yes owner={{ eclipse_install_owner }} dest={{eclipse_base_dir}}/eclipse-{{eclipse_major}}/configuration
 
