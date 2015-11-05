@@ -206,8 +206,8 @@
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Unzip PyDev bundle
-  #unarchive: src="/tmp/pydev/{{ pydev_bundle }}" dest=/tmp/pydev
-  shell: unzip "/tmp/pydev/{{ pydev_bundle }}"
+  unarchive: src="/tmp/pydev/{{ pydev_bundle }}" dest=/tmp/pydev
+  #shell: unzip "/tmp/pydev/{{ pydev_bundle }}"
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Install PyDev plugins
