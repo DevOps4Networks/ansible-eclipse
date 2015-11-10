@@ -275,8 +275,11 @@
 - name: eclipse | Configure eclipse desktop icon
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/Desktop/eclipse.desktop
   
-- name: eclipse | fix permissions eclipse icon location home
+- name: eclipse | fix permissions eclipse menu entry
   file: owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop mode=u+rwx,g+rwx,o+r
+  
+- name: eclipse | fix permissions eclipse desktop icon
+  file: owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} dest={{ eclipse_dev_user_home }}/Desktop/eclipse.desktop mode=u+rwx,g+rwx,o+r
 
 #Tidy up Eclipse install
 - name: eclipse | fix permissions eclipse home
