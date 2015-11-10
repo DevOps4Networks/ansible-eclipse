@@ -214,6 +214,10 @@
 - name: eclipse | Install PyDev plugins
   command: mv /tmp/pydev/features /tmp/pydev/plugins {{eclipse_base_dir}}/eclipse-{{eclipse_major}}/dropins 
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
+
+- name: eclipse | Tidy up PyDev download
+  command: rm -rf /tmp/pydev
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 #Subclipse
 - name: eclipse | Install JavaHL for subclipse Debian
@@ -259,8 +263,11 @@
   when: eclipse_ini_enabled
 
 #Eclipse icon
-- name: eclipse | Create eclipse icon destination
+- name: eclipse | Create eclipse menu entry destination
   file: recurse=yes path={{ eclipse_dev_user_home }}/.local/share/applications owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} state=directory mode=u+rwx,g+rwx,o+r
+    
+- name: eclipse | Create eclipse Desktop icon destination
+  file: recurse=yes path={{ eclipse_dev_user_home }}/Desktop owner={{ eclipse_dev_user }} group={{ eclipse_dev_group }} state=directory mode=u+rwx,g+rwx,o+r
     
 - name: eclipse | Configure eclipse menu entry
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
