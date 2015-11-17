@@ -206,8 +206,8 @@
 
 - name: eclipse | Get eclipse Pydev plugin bundle
   #TODO Test get_url again and raise a bug about spaces in the URL
-  #shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}" -O pydev.zip
-  get_url: url="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev
+  shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}" -O pydev.zip
+  #get_url: url="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Unzip PyDev bundle
