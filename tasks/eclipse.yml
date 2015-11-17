@@ -202,7 +202,8 @@
 #Pydev
 - name: eclipse | Get eclipse Pydev plugin bundle
   #TODO Test get_url again and raise a bug about spaces in the URL
-  shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}" -O pydev.zip
+  #shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}" -O pydev.zip
+  unarchive: src="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev copy=no
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Unzip PyDev bundle
@@ -273,6 +274,7 @@
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/.local/share/applications/eclipse.desktop
   
 - name: eclipse | Configure eclipse desktop icon
+  #TODO Does not work with KDE
   template: src=eclipse.desktop.j2 dest={{ eclipse_dev_user_home }}/Desktop/eclipse.desktop
   
 - name: eclipse | fix permissions eclipse menu entry
