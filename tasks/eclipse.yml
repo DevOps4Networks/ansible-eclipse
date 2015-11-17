@@ -200,10 +200,14 @@
   ignore_errors: True
 
 #Pydev
+- name: eclipse | Create PyDev bundle destination
+  file: recurse=yes path=/tmp/dev state=directory
+  when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
+
 - name: eclipse | Get eclipse Pydev plugin bundle
   #TODO Test get_url again and raise a bug about spaces in the URL
   #shell: mkdir -p /tmp/pydev; cd /tmp/pydev; wget "{{ pydev_url }}/{{ pydev_bundle }}" -O pydev.zip
-  unarchive: src="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev copy=no
+  get_url: url="{{ pydev_url }}/{{ pydev_bundle }}" dest=/tmp/pydev
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 - name: eclipse | Unzip PyDev bundle
@@ -217,7 +221,7 @@
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
 
 - name: eclipse | Tidy up PyDev download
-  command: rm -rf /tmp/pydev
+  file: path=/tmp/pydev state=absent
   when: eclipse_plugins_pydev_enabled and eclipse_plugins_enabled
   
 #Subclipse
